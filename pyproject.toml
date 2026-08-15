@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "workshop-invitation-bot"
+version = "0.1.0"
+description = "Aiogram 3 bot that creates workshop invitations with Nano Banana Pro"
+readme = "README.md"
+requires-python = ">=3.11,<3.15"
+license = { text = "Proprietary" }
+dependencies = [
+    "aiogram>=3.30.0,<4.0.0",
+    "google-genai>=2.18.1,<3.0.0",
+    "Pillow>=12.3.0,<13.0.0",
+    "python-dotenv>=1.2.2,<2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.1.1,<10.0.0",
+    "pytest-asyncio>=1.4.0,<2.0.0",
+    "ruff>=0.16.3,<0.17.0",
+]
+
+[project.scripts]
+workshop-invitation-bot = "ticketbot.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ticketbot"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/ticketbot/assets/invitation_reference.png" = "ticketbot/assets/invitation_reference.png"
+"src/ticketbot/assets/fonts/Montserrat-Variable.ttf" = "ticketbot/assets/fonts/Montserrat-Variable.ttf"
+"src/ticketbot/assets/fonts/OFL.txt" = "ticketbot/assets/fonts/OFL.txt"
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+asyncio_mode = "auto"
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/ticketbot/handlers/admin.py" = ["RUF001"]
+"src/ticketbot/keyboards.py" = ["RUF001"]
+"src/ticketbot/middleware.py" = ["RUF001"]
+"tests/test_invitation.py" = ["RUF001"]
+"tests/test_prompt_builder.py" = ["RUF001"]
